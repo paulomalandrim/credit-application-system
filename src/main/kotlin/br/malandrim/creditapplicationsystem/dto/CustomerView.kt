@@ -18,7 +18,7 @@ data class CustomerView(
         cpf = customer.cpf,
         income = customer.income,
         email = customer.email,
-        zipCode = customer.address.zipcode,
+        zipCode = customer.address.zipCode,
         street = customer.address.street
     )
 }

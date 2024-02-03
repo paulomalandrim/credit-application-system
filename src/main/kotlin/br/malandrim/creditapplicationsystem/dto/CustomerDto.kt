@@ -11,7 +11,7 @@ data class CustomerDto(
     val income: BigDecimal,
     val email: String,
     val password: String,
-    val zipcode: String,
+    val zipCode: String,
     val street: String
 ){
     fun toEntity(): Customer = Customer(
@@ -22,7 +22,7 @@ data class CustomerDto(
         email = this.email,
         password = this.password,
         address = Address(
-            zipcode = this.zipcode,
+            zipCode = this.zipCode,
             street = this.street
         )
     )

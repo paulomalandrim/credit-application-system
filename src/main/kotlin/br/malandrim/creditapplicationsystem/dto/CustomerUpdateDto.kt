@@ -14,7 +14,7 @@ data class CustomerUpdateDto(
         customer.firstName = this.firstName
         customer.lastName = this.lastName
         customer.income = this.income
-        customer.address.zipcode = this.zipCode
+        customer.address.zipCode = this.zipCode
         customer.address.street = this.street
         return customer
     }
