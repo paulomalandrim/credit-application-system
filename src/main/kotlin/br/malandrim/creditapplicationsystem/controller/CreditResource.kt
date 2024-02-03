@@ -7,6 +7,7 @@ import br.malandrim.creditapplicationsystem.entity.Credit
 import br.malandrim.creditapplicationsystem.entity.Customer
 import br.malandrim.creditapplicationsystem.repository.CreditRepository
 import br.malandrim.creditapplicationsystem.service.impl.CreditService
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -21,7 +22,7 @@ class CreditResource(
 ) {
 
     @PostMapping
-    fun saveCredit(@RequestBody creditDto: CreditDto): ResponseEntity<String>{
+    fun saveCredit(@RequestBody @Valid creditDto: CreditDto): ResponseEntity<String>{
         val credit = creditService.save(creditDto.toEntity())
         return ResponseEntity.status(HttpStatus.CREATED)
             .body("Credit ${credit.creditCode} - Customer ${credit.customer?.firstName} saved!")

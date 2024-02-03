@@ -1,6 +1,7 @@
 package br.malandrim.creditapplicationsystem.service.impl
 
 import br.malandrim.creditapplicationsystem.entity.Credit
+import br.malandrim.creditapplicationsystem.exception.BusinessException
 import br.malandrim.creditapplicationsystem.repository.CreditRepository
 import br.malandrim.creditapplicationsystem.service.ICreditService
 import org.springframework.stereotype.Service
@@ -24,8 +25,8 @@ class CreditService(
 
     override fun findByCreditCode(creditCode: UUID, customerId: Long): Credit {
         val credit: Credit = creditRepository.findByCreditCode(creditCode) ?:
-                   throw RuntimeException("CreditCode $creditCode not found")
-        return if (credit.customer?.id == customerId) credit else throw RuntimeException("Contact admin")
+                   throw BusinessException("CreditCode $creditCode not found")
+        return if (credit.customer?.id == customerId) credit else throw IllegalArgumentException("Contact admin")
 
     }
 
