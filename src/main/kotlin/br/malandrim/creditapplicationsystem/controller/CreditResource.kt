@@ -16,7 +16,7 @@ import java.util.stream.Collector
 import java.util.stream.Collectors
 
 @RestController
-@RequestMapping("/api/v1/credit")
+@RequestMapping("/api/v1/credits")
 class CreditResource(
     private val creditService: CreditService
 ) {

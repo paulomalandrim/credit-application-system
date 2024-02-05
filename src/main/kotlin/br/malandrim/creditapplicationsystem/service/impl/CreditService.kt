@@ -5,6 +5,8 @@ import br.malandrim.creditapplicationsystem.exception.BusinessException
 import br.malandrim.creditapplicationsystem.repository.CreditRepository
 import br.malandrim.creditapplicationsystem.service.ICreditService
 import org.springframework.stereotype.Service
+import java.time.LocalDate
+import java.time.LocalDateTime
 import java.util.*
 
 @Service
@@ -13,6 +15,11 @@ class CreditService(
     private val customerService: CustomerService
 ): ICreditService {
     override fun save(credit: Credit): Credit {
+        val localDateTime = LocalDate.now().plusMonths(3)
+
+        if (credit.dayFirstInstallment > localDateTime)
+            throw BusinessException("dayFirstInstallment must be within 3 month ")
+
         credit.apply {
             customer = customerService.findById(credit.customer?.id!!)
         }
