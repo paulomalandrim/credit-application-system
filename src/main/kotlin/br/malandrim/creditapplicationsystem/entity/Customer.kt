@@ -4,7 +4,6 @@ import jakarta.persistence.*
 import java.math.BigDecimal
 
 @Entity
-//@Table(name = "cliente")
 data class Customer(
     @Column(nullable = false)
     var firstName: String = "",
@@ -28,9 +27,10 @@ data class Customer(
     @Embedded
     var address: Address = Address(),
 
+
     @Column(nullable = false)
     @OneToMany(fetch = FetchType.LAZY,
-               cascade = arrayOf(CascadeType.REMOVE, CascadeType.PERSIST),
+               cascade = arrayOf(CascadeType.REMOVE, CascadeType.ALL),
                mappedBy = "customer")
     var credits: List<Credit> = mutableListOf(),
 
