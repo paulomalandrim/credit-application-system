@@ -3,7 +3,6 @@ package br.malandrim.creditapplicationsystem.service
 import br.malandrim.creditapplicationsystem.entity.Address
 import br.malandrim.creditapplicationsystem.entity.Credit
 import br.malandrim.creditapplicationsystem.entity.Customer
-import br.malandrim.creditapplicationsystem.enummeration.Status
 import br.malandrim.creditapplicationsystem.repository.CreditRepository
 import br.malandrim.creditapplicationsystem.repository.CustomerRepository
 import br.malandrim.creditapplicationsystem.service.impl.CreditService
@@ -17,8 +16,6 @@ import io.mockk.verify
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.test.context.ActiveProfiles
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.Month
@@ -75,30 +72,36 @@ class CreditServiceTest {
     @Test
     fun `should find by credit code`(){
         // given
-        val fakeCustomerId: Long = Random.nextLong()
-        val fakeCustomer: Customer = buildCustomer(id = fakeCustomerId)
-        val fakeCredit1: Credit = buildCredit(customer = fakeCustomer)
-        val fakeCredit2: Credit = buildCredit(customer = fakeCustomer)
-        val fakeCreditList: List<Credit> = listOf(fakeCredit1, fakeCredit2)
-        every { customerService.findById(any()) } returns fakeCustomer
-        every { creditRepository.findAllByCustomer(any()) } returns fakeCreditList
+        val customerId: Long = Random.nextLong()
+        val customer: Customer = buildCustomer(id = customerId)
+
+        val creditCode: UUID = UUID.randomUUID()
+        val fakeCredit: Credit = buildCredit(
+            customer = customer,
+            creditCode = creditCode
+        )
+
+        every { creditRepository.findByCreditCode(any())!! } returns fakeCredit
+        every { creditService.findByCreditCode(any(), any()) } returns fakeCredit
+
         //when
-        val actual: List<Credit> = creditService.findAllByCustomer(fakeCustomerId)
+        val actual: Credit = creditService.findByCreditCode(creditCode, customerId)
+
         //then
         Assertions.assertThat(actual).isNotNull
-        Assertions.assertThat(actual).isSameAs(fakeCreditList)
-        verify(exactly = 1) { creditRepository.findAllByCustomer(fakeCustomerId) }
+        Assertions.assertThat(actual).isSameAs(fakeCredit)
+        verify(exactly = 1) { creditRepository.findByCreditCode(creditCode) }
     }
 
-
-
     fun buildCredit(
+        creditCode: UUID = UUID.randomUUID(),
         creditValue: BigDecimal = BigDecimal.valueOf(500.0),
         dayFirstInstallment: LocalDate = LocalDate.of(2024, Month.MARCH, 20),
         numberOfInstallments: Int = 5,
         customer: Customer,
         id: Long? = 1L
     ) = Credit(
+        creditCode = creditCode,
         creditValue = creditValue,
         dayFirstInstallment = dayFirstInstallment,
         numberOfInstallments = numberOfInstallments,

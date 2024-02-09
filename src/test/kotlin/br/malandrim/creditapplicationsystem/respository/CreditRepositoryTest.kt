@@ -1,4 +1,4 @@
-package br.malandrim.creditapplicationsystem.service
+package br.malandrim.creditapplicationsystem.respository
 
 import br.malandrim.creditapplicationsystem.entity.Address
 import br.malandrim.creditapplicationsystem.entity.Credit
@@ -14,20 +14,23 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
 import org.springframework.test.context.ActiveProfiles
 import java.math.BigDecimal
 import java.time.LocalDate
-import java.util.UUID
+import java.util.*
 
 @ActiveProfiles("test")
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class CreditRepositoryTest {
-    @Autowired lateinit var creditRepository: CreditRepository
-    @Autowired lateinit var testEntityManager: TestEntityManager
+    @Autowired
+    lateinit var creditRepository: CreditRepository
+    @Autowired
+    lateinit var testEntityManager: TestEntityManager
 
     private lateinit var customer: Customer
     private lateinit var credit1: Credit
     private lateinit var credit2: Credit
 
-    @BeforeEach fun setup(){
+    @BeforeEach
+    fun setup(){
         customer = testEntityManager.persist(buildCustomer())
         credit1 = testEntityManager.persist(buildCredit(customer = customer))
         credit2 = testEntityManager.persist(buildCredit(customer = customer))
@@ -46,6 +49,17 @@ class CreditRepositoryTest {
         //then
         Assertions.assertThat(fakeCredit1).isNotNull
         Assertions.assertThat(fakeCredit2).isNotNull
+    }
+
+    @Test
+    fun `should find all by customer id`(){
+        //given
+        val customerId: Long = 1L
+        //when
+        val creditList: List<Credit> = creditRepository.findAllByCustomer(customerId)
+
+        //then
+        Assertions.assertThat(creditList).isNotEmpty
     }
 
     fun buildCredit(
