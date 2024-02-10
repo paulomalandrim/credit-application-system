@@ -18,7 +18,7 @@ class CreditService(
         val localDateTime = LocalDate.now().plusMonths(3)
 
         if (credit.dayFirstInstallment > localDateTime)
-            throw BusinessException("dayFirstInstallment must be within 3 month ")
+            throw BusinessException("Day of first installment must be within 3 month")
 
         credit.apply {
             customer = customerService.findById(credit.customer?.id!!)

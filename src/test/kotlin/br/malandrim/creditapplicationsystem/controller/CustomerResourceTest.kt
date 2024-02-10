@@ -61,10 +61,10 @@ class CustomerResourceTest {
             .andExpect(MockMvcResultMatchers.jsonPath("$.firstName").value("Paulo"))
             .andExpect(MockMvcResultMatchers.jsonPath("$.lastName").value("Malandrim"))
             .andExpect(MockMvcResultMatchers.jsonPath("$.cpf").value("33920373898"))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.email").value("paulo@gmail.com"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.email").value("paulo.malandrim@gmail.com"))
             .andExpect(MockMvcResultMatchers.jsonPath("$.income").value("1000.0"))
             .andExpect(MockMvcResultMatchers.jsonPath("$.zipCode").value("000000"))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.street").value("Rua Outra, 123"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.street").value("Rua do Meio"))
             .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(1))
             .andDo(MockMvcResultHandlers.print())
     }
@@ -129,13 +129,13 @@ class CustomerResourceTest {
                 .accept(MediaType.APPLICATION_JSON)
         )
             .andExpect(MockMvcResultMatchers.status().isOk)
-            .andExpect(MockMvcResultMatchers.jsonPath("$.firstName").value("Cami"))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.lastName").value("Cavalcante"))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.cpf").value("28475934625"))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.email").value("camila@email.com"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.firstName").value("Paulo"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.lastName").value("Malandrim"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.cpf").value("33920373898"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.email").value("paulo.malandrim@gmail.com"))
             .andExpect(MockMvcResultMatchers.jsonPath("$.income").value("1000.0"))
             .andExpect(MockMvcResultMatchers.jsonPath("$.zipCode").value("000000"))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.street").value("Rua da Cami, 123"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.street").value("Rua do Meio"))
             //.andExpect(MockMvcResultMatchers.jsonPath("$.id").value(1))
             .andDo(MockMvcResultHandlers.print())
     }
@@ -156,7 +156,7 @@ class CustomerResourceTest {
             .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(400))
             .andExpect(
                 MockMvcResultMatchers.jsonPath("$.exception")
-                    .value("class me.dio.credit.application.system.exception.BusinessException")
+                    .value("class br.malandrim.creditapplicationsystem.exception.BusinessException")
             )
             .andExpect(MockMvcResultMatchers.jsonPath("$.details[*]").isNotEmpty)
             .andDo(MockMvcResultHandlers.print())
@@ -192,7 +192,7 @@ class CustomerResourceTest {
             .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(400))
             .andExpect(
                 MockMvcResultMatchers.jsonPath("$.exception")
-                    .value("class me.dio.credit.application.system.exception.BusinessException")
+                    .value("class br.malandrim.creditapplicationsystem.exception.BusinessException")
             )
             .andExpect(MockMvcResultMatchers.jsonPath("$.details[*]").isNotEmpty)
             .andDo(MockMvcResultHandlers.print())
@@ -212,13 +212,13 @@ class CustomerResourceTest {
                 .content(valueAsString)
         )
             .andExpect(MockMvcResultMatchers.status().isOk)
-            .andExpect(MockMvcResultMatchers.jsonPath("$.firstName").value("CamiUpdate"))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.lastName").value("CavalcanteUpdate"))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.cpf").value("28475934625"))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.email").value("camila@email.com"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.firstName").value("Paulo Roberto"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.lastName").value("Malandrim"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.cpf").value("33920373898"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.email").value("paulo.malandrim@gmail.com"))
             .andExpect(MockMvcResultMatchers.jsonPath("$.income").value("5000.0"))
             .andExpect(MockMvcResultMatchers.jsonPath("$.zipCode").value("45656"))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.street").value("Rua Updated"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.street").value("Rua Johann Ludwing"))
             //.andExpect(MockMvcResultMatchers.jsonPath("$.id").value(1))
             .andDo(MockMvcResultHandlers.print())
     }
@@ -242,7 +242,7 @@ class CustomerResourceTest {
             .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(400))
             .andExpect(
                 MockMvcResultMatchers.jsonPath("$.exception")
-                    .value("class me.dio.credit.application.system.exception.BusinessException")
+                    .value("class br.malandrim.creditapplicationsystem.exception.BusinessException")
             )
             .andExpect(MockMvcResultMatchers.jsonPath("$.details[*]").isNotEmpty)
             .andDo(MockMvcResultHandlers.print())
@@ -250,14 +250,14 @@ class CustomerResourceTest {
 
 
     private fun builderCustomerDto(
-        firstName: String = "Cami",
-        lastName: String = "Cavalcante",
-        cpf: String = "28475934625",
-        email: String = "camila@email.com",
+        firstName: String = "Paulo",
+        lastName: String = "Malandrim",
+        cpf: String = "33920373898",
+        email: String = "paulo.malandrim@gmail.com",
         income: BigDecimal = BigDecimal.valueOf(1000.0),
         password: String = "1234",
         zipCode: String = "000000",
-        street: String = "Rua da Cami, 123",
+        street: String = "Rua do Meio",
     ) = CustomerDto(
         firstName = firstName,
         lastName = lastName,
@@ -270,11 +270,11 @@ class CustomerResourceTest {
     )
 
     private fun builderCustomerUpdateDto(
-        firstName: String = "CamiUpdate",
-        lastName: String = "CavalcanteUpdate",
+        firstName: String = "Paulo Roberto",
+        lastName: String = "Malandrim",
         income: BigDecimal = BigDecimal.valueOf(5000.0),
         zipCode: String = "45656",
-        street: String = "Rua Updated"
+        street: String = "Rua Johann Ludwing"
     ): CustomerUpdateDto = CustomerUpdateDto(
         firstName = firstName,
         lastName = lastName,
