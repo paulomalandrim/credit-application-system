@@ -67,7 +67,7 @@ class RestExceptionHandler {
                 ExceptionDetails(
                     title = "Bad Request! Consult the documentation",
                     timestamp = LocalDateTime.now(),
-                    status = HttpStatus.BAD_REQUEST.value(),
+                    status = HttpStatus.CONFLICT.value(),
                     exception = ex.javaClass.toString(),
                     details = mutableMapOf(ex.cause.toString() to ex.message)
                 )

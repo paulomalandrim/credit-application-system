@@ -4,12 +4,10 @@ import br.malandrim.creditapplicationsystem.dto.CreditDto
 import br.malandrim.creditapplicationsystem.dto.CustomerDto
 import br.malandrim.creditapplicationsystem.dto.CustomerUpdateDto
 import br.malandrim.creditapplicationsystem.entity.Credit
-import br.malandrim.creditapplicationsystem.entity.Customer
 import br.malandrim.creditapplicationsystem.enummeration.Status
 import br.malandrim.creditapplicationsystem.repository.CreditRepository
 import br.malandrim.creditapplicationsystem.repository.CustomerRepository
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.mockk.Matcher
 import org.hamcrest.Matchers
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -18,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
+import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.servlet.MockMvc
@@ -32,6 +31,7 @@ import java.util.*
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
 @ContextConfiguration
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class CreditResourceTest {
     @Autowired
     private lateinit var customerRepository: CustomerRepository
@@ -44,6 +44,7 @@ class CreditResourceTest {
 
     @Autowired
     private lateinit var objectMapper: ObjectMapper
+
 
     companion object {
         const val URL: String = "/api/v1/credits"
@@ -216,114 +217,91 @@ class CreditResourceTest {
     }
 
 
-//
-//    @Test
-//    fun `should not find customer with invalid id and return 400 status`() {
-//        //given
-//        val invalidId: Long = 2L
-//        //when
-//        //then
-//        mockMvc.perform(
-//            MockMvcRequestBuilders.get("$URL/$invalidId")
-//                .accept(MediaType.APPLICATION_JSON)
-//        )
-//            .andExpect(MockMvcResultMatchers.status().isBadRequest)
-//            .andExpect(MockMvcResultMatchers.jsonPath("$.title").value("Bad Request! Consult the documentation"))
-//            .andExpect(MockMvcResultMatchers.jsonPath("$.timestamp").exists())
-//            .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(400))
-//            .andExpect(
-//                MockMvcResultMatchers.jsonPath("$.exception")
-//                    .value("class br.malandrim.creditapplicationsystem.exception.BusinessException")
-//            )
-//            .andExpect(MockMvcResultMatchers.jsonPath("$.details[*]").isNotEmpty)
-//            .andDo(MockMvcResultHandlers.print())
-//    }
-//
-//    @Test
-//    fun `should delete customer by id and return 204 status`() {
-//        //given
-//        val customer: Customer = customerRepository.save(builderCustomerDto().toEntity())
-//        //when
-//        //then
-//        mockMvc.perform(
-//            MockMvcRequestBuilders.delete("$URL/${customer.id}")
-//                .accept(MediaType.APPLICATION_JSON)
-//        )
-//            .andExpect(MockMvcResultMatchers.status().isNoContent)
-//            .andDo(MockMvcResultHandlers.print())
-//    }
-//
-//    @Test
-//    fun `should not delete customer by id and return 400 status`() {
-//        //given
-//        val invalidId: Long = Random().nextLong()
-//        //when
-//        //then
-//        mockMvc.perform(
-//            MockMvcRequestBuilders.delete("$URL/${invalidId}")
-//                .accept(MediaType.APPLICATION_JSON)
-//        )
-//            .andExpect(MockMvcResultMatchers.status().isBadRequest)
-//            .andExpect(MockMvcResultMatchers.jsonPath("$.title").value("Bad Request! Consult the documentation"))
-//            .andExpect(MockMvcResultMatchers.jsonPath("$.timestamp").exists())
-//            .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(400))
-//            .andExpect(
-//                MockMvcResultMatchers.jsonPath("$.exception")
-//                    .value("class br.malandrim.creditapplicationsystem.exception.BusinessException")
-//            )
-//            .andExpect(MockMvcResultMatchers.jsonPath("$.details[*]").isNotEmpty)
-//            .andDo(MockMvcResultHandlers.print())
-//    }
-//
-//    @Test
-//    fun `should update a customer and return 200 status`() {
-//        //given
-//        val customer: Customer = customerRepository.save(builderCustomerDto().toEntity())
-//        val customerUpdateDto: CustomerUpdateDto = builderCustomerUpdateDto()
-//        val valueAsString: String = objectMapper.writeValueAsString(customerUpdateDto)
-//        //when
-//        //then
-//        mockMvc.perform(
-//            MockMvcRequestBuilders.patch("$URL?customerId=${customer.id}")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(valueAsString)
-//        )
-//            .andExpect(MockMvcResultMatchers.status().isOk)
-//            .andExpect(MockMvcResultMatchers.jsonPath("$.firstName").value("Paulo Roberto"))
-//            .andExpect(MockMvcResultMatchers.jsonPath("$.lastName").value("Malandrim"))
-//            .andExpect(MockMvcResultMatchers.jsonPath("$.cpf").value("33920373898"))
-//            .andExpect(MockMvcResultMatchers.jsonPath("$.email").value("paulo.malandrim@gmail.com"))
-//            .andExpect(MockMvcResultMatchers.jsonPath("$.income").value("5000.0"))
-//            .andExpect(MockMvcResultMatchers.jsonPath("$.zipCode").value("45656"))
-//            .andExpect(MockMvcResultMatchers.jsonPath("$.street").value("Rua Johann Ludwing"))
-//            //.andExpect(MockMvcResultMatchers.jsonPath("$.id").value(1))
-//            .andDo(MockMvcResultHandlers.print())
-//    }
-//
-//    @Test
-//    fun `should not update a customer with invalid id and return 400 status`() {
-//        //given
-//        val invalidId: Long = Random().nextLong()
-//        val customerUpdateDto: CustomerUpdateDto = builderCustomerUpdateDto()
-//        val valueAsString: String = objectMapper.writeValueAsString(customerUpdateDto)
-//        //when
-//        //then
-//        mockMvc.perform(
-//            MockMvcRequestBuilders.patch("$URL?customerId=$invalidId")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(valueAsString)
-//        )
-//            .andExpect(MockMvcResultMatchers.status().isBadRequest)
-//            .andExpect(MockMvcResultMatchers.jsonPath("$.title").value("Bad Request! Consult the documentation"))
-//            .andExpect(MockMvcResultMatchers.jsonPath("$.timestamp").exists())
-//            .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(400))
-//            .andExpect(
-//                MockMvcResultMatchers.jsonPath("$.exception")
-//                    .value("class br.malandrim.creditapplicationsystem.exception.BusinessException")
-//            )
-//            .andExpect(MockMvcResultMatchers.jsonPath("$.details[*]").isNotEmpty)
-//            .andDo(MockMvcResultHandlers.print())
-//    }
+    @Test
+    fun `should find credit using customer id and credit code`(){
+        //given
+        val customerId: Long = 1L
+
+        val credit: Credit = builderCreditDto(customerId = customerId).toEntity()
+        val creditCode: UUID = UUID.randomUUID()
+        credit.creditCode = creditCode
+
+        creditRepository.save(credit)
+
+        //when
+        //then
+        mockMvc.perform(
+            MockMvcRequestBuilders.get("$URL/$creditCode")
+                .accept(MediaType.APPLICATION_JSON)
+                .param("customerId", customerId.toString())
+        )
+            .andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(MockMvcResultMatchers.jsonPath("$.creditCode").value("$creditCode"))
+            .andDo(MockMvcResultHandlers.print())
+    }
+
+    @Test
+    fun `should not find credit using a invalid credit code return business exception`(){
+        //given
+        val customerId: Long = 1L
+
+        val credit: Credit = builderCreditDto(customerId = customerId).toEntity()
+        val creditCode: UUID = UUID.randomUUID()
+        credit.creditCode = creditCode
+        creditRepository.save(credit)
+
+        val invalidCreditCode: UUID = UUID.randomUUID()
+
+        //when
+        //then
+        mockMvc.perform(
+            MockMvcRequestBuilders.get("$URL/$invalidCreditCode")
+                .accept(MediaType.APPLICATION_JSON)
+                .param("customerId", customerId.toString())
+        )
+            .andExpect(MockMvcResultMatchers.status().isBadRequest)
+            .andExpect(MockMvcResultMatchers.jsonPath("$.title").value("Bad Request! Consult the documentation"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.timestamp").exists())
+            .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(400))
+            .andExpect(
+                MockMvcResultMatchers.jsonPath("$.exception")
+                    .value("class br.malandrim.creditapplicationsystem.exception.BusinessException")
+            )
+            .andExpect(MockMvcResultMatchers.jsonPath("$.details[*]").isNotEmpty)
+            .andExpect(MockMvcResultMatchers.jsonPath("$.details[*]"). value("CreditCode $invalidCreditCode not found"))
+            .andDo(MockMvcResultHandlers.print())
+    }
+
+    @Test
+    fun `should find a credit using credit code but an invalid customer id return illegal argument exception`(){
+        //given
+        val customerId: Long = 1L
+        val invalidCustomerId: Long = 2L
+        val credit: Credit = builderCreditDto(customerId = customerId).toEntity()
+        val creditCode: UUID = UUID.randomUUID()
+        credit.creditCode = creditCode
+        creditRepository.save(credit)
+
+        //when
+        //then
+        mockMvc.perform(
+            MockMvcRequestBuilders.get("$URL/$creditCode")
+                .accept(MediaType.APPLICATION_JSON)
+                .param("customerId", invalidCustomerId.toString())
+        )
+            .andExpect(MockMvcResultMatchers.status().isConflict)
+            .andExpect(MockMvcResultMatchers.jsonPath("$.title").value("Bad Request! Consult the documentation"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.timestamp").exists())
+            .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(409))
+            .andExpect(
+                MockMvcResultMatchers.jsonPath("$.exception")
+                    .value("class java.lang.IllegalArgumentException")
+            )
+            .andExpect(MockMvcResultMatchers.jsonPath("$.details[*]").isNotEmpty)
+            .andExpect(MockMvcResultMatchers.jsonPath("$.details[*]"). value("Contact admin"))
+            .andDo(MockMvcResultHandlers.print())
+
+    }
 
     private fun builderCreditDto(
         creditValue: BigDecimal = BigDecimal.valueOf(400.0),
