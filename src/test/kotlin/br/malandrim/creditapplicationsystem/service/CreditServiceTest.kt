@@ -69,7 +69,7 @@ class CreditServiceTest {
         //when
         Assertions.assertThatThrownBy { creditService.save(credit) }
             .isInstanceOf(BusinessException::class.java)
-            .hasMessage("Invalid Date")
+            .hasMessage("Day of first installment must be within 3 month")
         //then
         verify(exactly = 0) { creditRepository.save(any()) }
     }
@@ -114,12 +114,12 @@ class CreditServiceTest {
         val customerId: Long = 1L
         val invalidCreditCode: UUID = UUID.randomUUID()
 
-        every { creditRepository.findByCreditCode(invalidCreditCode) } returns null
+        every { creditRepository.findByCreditCode(any()) } returns null
         //when
         //then
         Assertions.assertThatThrownBy { creditService.findByCreditCode(invalidCreditCode, customerId) }
             .isInstanceOf(BusinessException::class.java)
-            .hasMessage("Creditcode $invalidCreditCode not found")
+            .hasMessage("CreditCode $invalidCreditCode not found")
         //then
         verify(exactly = 1) { creditRepository.findByCreditCode(invalidCreditCode) }
     }
